@@ -1,0 +1,22 @@
+<html>
+<head>
+	<title></title>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div id="plugin" class="input"></div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/plugin.js"></script>
+
+<script type="text/javascript">
+	var colors = colors = ["#33ff55","#aa55ee","#00ffff","#ff00ff","#000000","#ff0000"];
+	$("div#plugin").Kolors(colors, {
+		onColorClick: function (color) {
+			console.log(color);
+		}
+	});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+
+
+
+
+ul.kolors {
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  margin-bottom: 10px; }
+
+ul.kolors li {
+  float: left;
+  width: 30px;
+  height: 24px;
+  border: 4px solid transparent;
+  content: " ";
+  display: block;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.15)), to(rgba(0, 0, 0, 0.25))), -webkit-gradient(linear, left top, right bottom, color-stop(0, rgba(255, 255, 255, 0)), color-stop(0.5, rgba(255, 255, 255, 0.1)), color-stop(0.501, rgba(255, 255, 255, 0)), color-stop(1, rgba(255, 255, 255, 0)));
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.25)), -moz-linear-gradient(left top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0));
+  background: linear-gradient(top, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.25)), linear-gradient(left top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0));
+  -webkit-background-origin: border-box;
+  -moz-background-origin: border;
+  background-origin: border-box; }
+
+ul.kolors li.active span {
+  background: url("../images/bg-components.png") no-repeat -126px -23px;
+  width: 12px;
+  height: 10px;
+  display: block;
+  margin: auto;
+  margin-top: 7px; }
+
+ul.kolors li:hover {
+  border: 4px solid rgba(0, 0, 0, 0.2); }
+
+.input {
+  width: 440px;
+  float: left;
+  padding-bottom: 10px; }
+
+
+div.input {
+  padding-bottom: 20px; }
+
+div.input ul {
+  display: inline-block;
+  height: 32px !important;
+  border-radius: 4px;
+  border-color: #ccc;
+  width: 456px; }
+
+/*CSS AddOn to fix */
+ul.kolors li:first-child {
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+ul.kolors li:last-child {
+	-webkit-border-top-right-radius: 4px;
+	-webkit-border-bottom-right-radius: 4px;
+	-moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomright: 4px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
