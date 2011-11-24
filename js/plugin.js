@@ -5,14 +5,15 @@
     var PLUGIN_KEY = 'plugin_' + pluginName;
 
 
-    var KOLOR_TEMPLATE = '<li id="kolor-$kolor" style="background-color:#$kolor" $active data-kolor="#$kolor"><span></span></li>';
+    var KOLOR_TEMPLATE = '<li id="kolor-$kolor" style="background-color:#$kolor" class="$active" data-kolor="#$kolor"><span></span></li>';
 
-    var	DEFAULT_SETTINGS = {
-			callbacks: {}
+    var	DEFAULT_CALLBACKS = {
+			
 		};
 
     var DEFAULT_CLASSES = {
-        kolorList: "kolors"
+        kolorList: "kolors",
+        kolorActive: "kactive"
     };
 
     var methods = {
@@ -45,13 +46,38 @@
 	// The actual plugin constructor
 	function Kolors( element, colors, options ) {
 
+        // passing parent
         this.element = element;
 
+        // passing list of colors
         this.colors = colors;
 
-        this.callbacks = $.extend( {}, DEFAULT_SETTINGS.callbacks, options);
+        // Build settings object
+        this.settings = {};
 
-        this._defaults = DEFAULT_SETTINGS;
+        // Build callbacks
+        if(options.callbacks) {
+            // Use custom callbacks
+            this.settings.callbacks = $.extend({}, DEFAULT_CALLBACKS, options.callbacks);
+        } else {
+            this.settings.callbacks = DEFAULT_CALLBACKS;
+        }
+
+        // Build class names
+        if(options.classes) {
+            // Use custom class names
+            this.settings.classes = $.extend({}, DEFAULT_CLASSES, options.classes);
+        } else if(options.theme) {
+            // Use theme-suffixed default class names
+            $.each(DEFAULT_CLASSES, function(key, value) {
+                this.settings.classes = {};
+                this.settings.classes[key] = value + "-" + options.theme;
+            });
+        } else {
+            this.settings.classes = DEFAULT_CLASSES;
+        }
+
+        this._defaults = $.extend({}, { callbacks: DEFAULT_CALLBACKS}, {classes: DEFAULT_CLASSES});
         this._name = pluginName;
 
         this.init();
@@ -67,13 +93,13 @@
         },
 
         render: function () {
-            var html = '<ul class="$kolorList">'.replace('$kolorList', DEFAULT_CLASSES.kolorList);
+            var html = '<ul class="$kolorList">'.replace('$kolorList', this.settings.classes.kolorList);
             
             for(var i = 0, j = this.colors.length; i<j ; i++) {
 
                 var kolor = this.colors[i].replace('\#', '');
 
-                html += KOLOR_TEMPLATE.replace('$active',!i ? 'class="active"' : '')
+                html += KOLOR_TEMPLATE.replace('$active',!i ? this.settings.classes.kolorActive : '')
                         .replace(/\$kolor/g, kolor);
             }
 
@@ -89,9 +115,13 @@
             
             element.find("ul").delegate("li","click", function() {
 
-                var color = $(this).attr('id').replace('kolor-','');
+                var color = $(this).data("kolor");
 
                 self.changeActiveTo(color);
+
+                if (self.settings.callbacks.onColorClick) {
+                    self.settings.callbacks.onColorClick(color);
+                }
 
             });
         },
@@ -99,10 +129,11 @@
         changeActiveTo: function (color) {
             var kolor = color.replace('\#','');
             var selector = 'li#kolor-' + kolor;
+            var liClass = this.settings.classes.kolorActive;
 
-            $(this.element).find("li.active").removeClass("active");
+            $(this.element).find("li." + liClass).removeClass(liClass);
 
-            $(selector).addClass("active");
+            $(selector).addClass(liClass);
         },
 
         addToList: function (color) {
@@ -110,7 +141,7 @@
             var selector = 'li#kolor-' + kolor;
 
             if (!$(selector).length) {
-                $(this.element).find('ul.' + DEFAULT_CLASSES.kolorList).prepend(
+                $(this.element).find('ul.' + this.settings.classes.kolorList).prepend(
                 KOLOR_TEMPLATE.replace('$active','')
                             .replace(/\$kolor/g, kolor)
                 );
@@ -125,10 +156,11 @@
         removeFromList: function (color) {
             var kolor = color.replace('\#','');
             var selector = 'li#kolor-' + kolor;
+            var liClass = this.settings.classes.kolorActive;
 
             if ($(selector).length) {
-                if ($(selector).hasClass("active")) {
-                    var nextKolor = $(selector).next("li").attr('id').replace('kolor-','');
+                if ($(selector).hasClass(liClass)) {
+                    var nextKolor = $(selector).next("li").data("kolor");
                     $(selector).remove();
                     this.changeActiveTo(nextKolor);
                 } else {
@@ -141,7 +173,7 @@
         },
 
         getSelected: function () {
-            return $(this.element).find("li.active").data("kolor");
+            return $(this.element).find("li." + this.settings.classes.kolorActive).data("kolor");
         }
 
     };
@@ -150,7 +182,7 @@
     // preventing against multiple instantiations
     $.fn[pluginName] = function ( method ) {
         if(methods[method]) {
-            return methods[method].call($(this).data(PLUGIN_KEY),  Array.prototype.slice.call(arguments, 1));
+            return methods[method].apply($(this).data(PLUGIN_KEY),  Array.prototype.slice.call(arguments, 1));
         } else {
             return methods.init.apply(this, arguments);
 

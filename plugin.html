@@ -10,23 +10,19 @@
 <script type="text/javascript" src="js/plugin.js"></script>
 
 <script type="text/javascript">
+
 	var colors = ["#33ff55","#aa55ee","#00ffff","#ff00ff","#000000","#ff0000"];
-	$("div#plugin").Kolors(colors);
 
-	try {
-	} catch (err) {
-		console.log(err);
-	}
+	$("div#plugin").Kolors(colors, {
+		classes : {},
+		callbacks: {
+			onColorClick: function (color) {
+				console.log(color);
+			}
+		}
+	});
 
-	console.log($("div#plugin").Kolors('getColor'));	
 
-
-	// , {
-	// 	onColorClick: function (color) {
-	// 		console.log(color);
-	// 		this('lala');
-	// 	}
-	// }
 </script>
 
 </body>
