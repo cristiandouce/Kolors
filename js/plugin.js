@@ -45,7 +45,6 @@
 
 	// The actual plugin constructor
 	function Kolors( element, colors, options ) {
-
         // passing parent
         this.element = element;
 
@@ -68,14 +67,20 @@
             // Use custom class names
             this.settings.classes = $.extend({}, DEFAULT_CLASSES, options.classes);
         } else if(options.theme) {
+
             // Use theme-suffixed default class names
             $.each(DEFAULT_CLASSES, function(key, value) {
                 this.settings.classes = {};
                 this.settings.classes[key] = value + "-" + options.theme;
             });
+
         } else {
             this.settings.classes = DEFAULT_CLASSES;
         }
+
+        if (options.defaultColor) {
+            this.settings.defaultColor = options.defaultColor;
+        };
 
         this._defaults = $.extend({}, { callbacks: DEFAULT_CALLBACKS}, {classes: DEFAULT_CLASSES});
         this._name = pluginName;
@@ -106,6 +111,13 @@
             html += '</ul>';
 
             $(this.element).append(html);
+
+            // if default color, set it or prepend
+            // it in case it doesn't exists
+            if(this.settings.defaultColor) {
+                this.addToList(this.settings.defaultColor);
+                this.changeActiveTo(this.settings.defaultColor);
+            }
         },
 
         bindEvents: function () {
@@ -147,8 +159,10 @@
                 );
 
                 // this.changeActiveTo(kolor);
+                return '#' + kolor;
             } else {
                 // throw new Error('Color #$kolor already exists on the list'.replace('$kolor',kolor))
+                return false;
             }
             
         },
@@ -167,8 +181,10 @@
                     $(selector).remove();
                 }
                 
+                return '#' + kolor;
             }else {
                 // throw new Error('Color $kolor does not exist on the list'.replace('$kolor', '#' + kolor));
+                return false;
             }
         },
 
