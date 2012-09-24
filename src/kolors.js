@@ -1,26 +1,43 @@
 ;(function($) {
 
-    // Create the defaults once
+  /**
+   *  Plugin's name
+   */
   var pluginName = 'Kolors';
 
-  var PLUGIN_KEY = 'plugin_' + pluginName;
+  /**
+   *  Plugin's key
+   */
+  var pluginKey = 'plugin_' + pluginName;
 
+  /**
+   *  Plugin's template
+   */
   var KOLOR_TEMPLATE = '<li id="kolor-$kolor" style="background-color:#$kolor" class="$active" data-kolor="#$kolor"><span></span></li>';
 
+  /**
+   *  Plugin's default callbacks
+   */
   var DEFAULT_CALLBACKS = {
     
   };
 
+  /**
+   *  Plugin's default css classes
+   */
   var DEFAULT_CLASSES = {
       kolorList: "kolors"
     , kolorActive: "kactive"
   };
 
+  /**
+   *  Plugin's public methods
+   */
   var methods = {
     init: function ( colors, options) {
       return this.each(function () {
-        if (!$.data(this, PLUGIN_KEY) && $.isArray(colors)) {
-          $.data(this, PLUGIN_KEY, new Kolors(this, colors, options));
+        if (!$.data(this, pluginKey) && $.isArray(colors)) {
+          $.data(this, pluginKey, new Kolors(this, colors, options));
         }
       });
     },
@@ -42,9 +59,11 @@
     }
   }
 
-  // The actual plugin constructor
-  function Kolors( element, colors, options ) {
-    // passing parent
+  /**
+   *  Plugin's constructor
+   */
+  var Kolors = function(element, colors, options) {
+    // saving element's reference
     this.element = element;
 
     // passing list of colors
@@ -182,11 +201,12 @@
     }
   };
 
-  // A really lightweight plugin wrapper around the constructor,
-  // preventing against multiple instantiations
+  /**
+   *  Plugin's expose to jQuery
+   */
   $.fn[pluginName] = function ( method ) {
     if(methods[method]) {
-      return methods[method].apply($(this).data(PLUGIN_KEY),  Array.prototype.slice.call(arguments, 1));
+      return methods[method].apply($(this).data(pluginKey),  Array.prototype.slice.call(arguments, 1));
     } else {
       return methods.init.apply(this, arguments);
     }
